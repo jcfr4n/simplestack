@@ -1,5 +1,5 @@
 # Dockerfile
-FROM php:8.0.0-fpm-alpine3.12
+FROM php:8.3.18RC1-fpm-alpine3.20
 
 ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl 
 ENV MUSL_LOCPATH /usr/share/i18n/locales/musl
@@ -13,7 +13,7 @@ RUN apk add --no-cache \
       && cd musl-locales-master \
       && cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install \
       && cd .. && rm -r musl-locales-master
-
+    RUN apk add --update linux-headers
 RUN apk add --update oniguruma-dev freetype-dev libpng-dev libjpeg-turbo-dev libxml2-dev autoconf g++ libtool make
 
 RUN apk add --no-cache zip libzip-dev
