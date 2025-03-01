@@ -41,17 +41,18 @@ RUN echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini
    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.log=/var/log/xdebug.log" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.discover_client_host=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 # Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN addgroup -g 1000 web
-RUN adduser -u 1000 -G web -D -s /bin/sh web
 
 # Instalar npm
 RUN apk add --no-cache npm 
 
 # // cambiar al directorio raiz 
+RUN addgroup -g 1000 web
+RUN adduser -u 1000 -G web -D -s /bin/sh web
 WORKDIR /var/www/html
 
 RUN chown -R web:web /var/www/html
