@@ -1,10 +1,10 @@
 # Dockerfile
 FROM php:8.3.18RC1-fpm-alpine3.20
 
-ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl 
-ENV MUSL_LOCPATH /usr/share/i18n/locales/musl
 ENV LANG=es_ES.UTF-8 \
     LANGUAGE=es_ES.UTF-8
+ENV MUSL_LOCALE_DEPS cmake make musl-dev gcc gettext-dev libintl 
+ENV MUSL_LOCPATH /usr/share/i18n/locales/musl
 
 RUN apk add --no-cache \
     $MUSL_LOCALE_DEPS \
@@ -41,7 +41,7 @@ RUN echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini
    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.log=/var/log/xdebug.log" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.discover_client_host=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-   && echo "xdebug.client_port=9001" >> /usr/local/etc/php/conf.d/xdebug.ini
+   && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 # Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -49,6 +49,13 @@ RUN addgroup -g 1000 web
 RUN adduser -u 1000 -G web -D -s /bin/sh web
 
 # Instalar npm
-RUN apk add npm 
+RUN apk add --no-cache npm 
 
-RUN chown -R web:web /srv/www/web
+# // cambiar al directorio raiz 
+WORKDIR /var/www/html
+
+RUN chown -R web:web /var/www/html
+
+# USER web
+
+# RUN composer create-project laravel/laravel laravel
